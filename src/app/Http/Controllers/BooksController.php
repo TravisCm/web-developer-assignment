@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Book;
+use App\Book;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +14,9 @@ class BooksController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::all();
+
+        return view('book', compact('books'));
     }
 
     /**
@@ -24,7 +26,7 @@ class BooksController extends Controller
      */
     public function create()
     {
-        //
+        return view('book');
     }
 
     /**
@@ -35,7 +37,12 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+        ]);
+        Book::create($request->all());
+        return redirect()->route('book');
     }
 
     /**
@@ -46,7 +53,7 @@ class BooksController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -57,7 +64,7 @@ class BooksController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('book', compact('books'));
     }
 
     /**
@@ -69,7 +76,11 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'author' => 'required',
+        ]);
+        $book->update($request->all());
+        return redirect()->route('book');
     }
 
     /**
@@ -80,6 +91,7 @@ class BooksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $book->delete();
+        return redirect()->route('book');
     }
 }
