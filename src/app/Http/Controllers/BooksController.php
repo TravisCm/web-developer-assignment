@@ -85,9 +85,11 @@ class BooksController extends Controller
         $request->validate([
             'author' => 'required',
         ]);
+    
         $book = Book::findOrFail($id);
-        $book->update($request->all());
-
+        $book->author = $request->author;
+        $book->save();
+    
         return redirect()->route('books');
     }
 
