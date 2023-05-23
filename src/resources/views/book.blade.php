@@ -4,7 +4,7 @@
     <title>Books</title>
 </head>
 <body>
-    <form method="POST" action="">
+    <form method="POST" action="{{route('books.store')}}">
         <!-- small amount of security -->
         @csrf
         <div>
@@ -31,7 +31,7 @@
                 <td>{{ $book->title }}</td>
                 <td>{{ $book->author }}</td>
                 <td>
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('books.destroy', ['id' => $book->id]) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit">Delete</button>

@@ -69,7 +69,8 @@ class BooksController extends Controller
      */
     public function edit($id)
     {
-        return view('book', compact('books'));
+        $book = Book::findOrFail($id);
+        return view('book', compact('book'));
     }
 
     /**
@@ -84,7 +85,9 @@ class BooksController extends Controller
         $request->validate([
             'author' => 'required',
         ]);
+        $book = Book::findOrFail($id);
         $book->update($request->all());
+
         return redirect()->route('books');
     }
 
@@ -96,6 +99,7 @@ class BooksController extends Controller
      */
     public function destroy($id)
     {
+        $book = Book::findOrFail($id);
         $book->delete();
         return redirect()->route('books');
     }

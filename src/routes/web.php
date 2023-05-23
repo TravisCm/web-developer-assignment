@@ -12,7 +12,12 @@
 */
 use App\Http\Controllers\BooksController;
 
+Route::delete('/books/{id}', [BooksController::class, 'destroy'])->name('books.destroy');
 Route::get('/books', [BooksController::class, 'index'])->name('books');
-Route::post('/books', [BooksController::class, 'store'])->name('books');
+Route::post('/books', [BooksController::class, 'store'])->name('books.store');
+
+
+
+
 
 
