@@ -12,5 +12,7 @@
 */
 use App\Http\Controllers\BooksController;
 
-Route::get('/books', [BooksController::class, 'index'])->name('books.index');
+Route::get('/books', [BooksController::class, 'index'])->name('books');
+Route::post('/books', [BooksController::class, 'store'])->name('books');
+
 

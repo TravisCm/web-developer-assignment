@@ -26,7 +26,7 @@ class BooksController extends Controller
      */
     public function create()
     {
-        return view('book');
+        return view('books');
     }
 
     /**
@@ -37,12 +37,17 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'author' => 'required',
+    $validatedData = $request->validate([
+        'title' => 'required',
+        'author' => 'required',
         ]);
-        Book::create($request->all());
-        return redirect()->route('book');
+
+    $book = new Book();
+    $book->title = $validatedData['title'];
+    $book->author = $validatedData['author'];
+    $book->save();
+
+    return redirect()->route('books');
     }
 
     /**
@@ -80,7 +85,7 @@ class BooksController extends Controller
             'author' => 'required',
         ]);
         $book->update($request->all());
-        return redirect()->route('book');
+        return redirect()->route('books');
     }
 
     /**
@@ -92,6 +97,6 @@ class BooksController extends Controller
     public function destroy($id)
     {
         $book->delete();
-        return redirect()->route('book');
+        return redirect()->route('books');
     }
 }
