@@ -12,12 +12,21 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::all();
-
+        $sortOption = $request->input('sort');
+    
+        if ($sortOption === 'title') {
+            $books = Book::orderBy('title')->get();
+        } elseif ($sortOption === 'author') {
+            $books = Book::orderBy('author')->get();
+        } else {
+            $books = Book::all();
+        }
+    
         return view('book', compact('books'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

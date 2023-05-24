@@ -47,6 +47,14 @@
             @endforeach
         </tbody>
     </table>
+    <div>
+        <span>Sort by:</span>
+        <label for="sortTitle">Title</label>
+        <input type="radio" id="sortTitle" name="sortOption" value="title" onclick="sortBooks()">
+        <label for="sortAuthor">Author</label>
+        <input type="radio" id="sortAuthor" name="sortOption" value="author" onclick="sortBooks()">
+    </div>
+
     <div id="updateModal" style="display: none;">
         <form method="POST" action="{{ route('books.update', ['id' => $book->id]) }}">
             @csrf
@@ -72,6 +80,15 @@
     function closeUpdateModal() {
         document.getElementById('updateModal').style.display = 'none';
     }
+
+
+    function sortBooks() {
+    const sortOption = document.querySelector('input[name="sortOption"]:checked').value;
+    const url = "{{ route('books') }}";
+    const queryString = `?sort=${sortOption}`;
+    window.location.href = url + queryString;
+}
+
 </script>
 
 </body>
