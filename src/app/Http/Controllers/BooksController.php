@@ -14,18 +14,28 @@ class BooksController extends Controller
      */
     public function index(Request $request)
     {
+        $search = $request->input('search');
         $sortOption = $request->input('sort');
     
-        if ($sortOption === 'title') {
-            $books = Book::orderBy('title')->get();
-        } elseif ($sortOption === 'author') {
-            $books = Book::orderBy('author')->get();
-        } else {
-            $books = Book::all();
+        $query = Book::query();
+    
+        if ($search) {
+            $query->where('title', 'LIKE', "%$search%")
+                  ->orWhere('author', 'LIKE', "%$search%");
         }
     
-        return view('book', compact('books'));
+        if ($sortOption === 'title') {
+            $query->orderBy('title');
+        } elseif ($sortOption === 'author') {
+            $query->orderBy('author');
+        }
+    
+        $books = $query->get();
+        $searchCount = $books->count();
+
+        return view('book', compact('books', 'searchCount', 'search'));
     }
+    
     
 
     /**
