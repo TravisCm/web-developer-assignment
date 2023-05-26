@@ -16,6 +16,9 @@ Route::delete('/books/{id}', [BooksController::class, 'destroy'])->name('books.d
 Route::put('/books/{id}', [BooksController::class, 'update'])->name('books.update');
 Route::get('/books', [BooksController::class, 'index'])->name('books');
 Route::post('/books', [BooksController::class, 'store'])->name('books.store');
+Route::post('/books/export', [BooksController::class, 'export'])->name('books.export');
+
+
 
 
 
