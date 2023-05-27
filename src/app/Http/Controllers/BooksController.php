@@ -18,9 +18,10 @@ class BooksController extends Controller
         $query = Book::query();
         
         /** Used for book search */
+        /** secure from sql injection as Laravel framework automatically performs parameter binding with curly braces surrounding search*/
         if ($search) {
-            $query->where('title', 'LIKE', "%$search%")
-                  ->orWhere('author', 'LIKE', "%$search%");
+            $query->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('author', 'LIKE', "%{$search}%");
         }
     
         /** Used for book sort */
@@ -45,16 +46,17 @@ class BooksController extends Controller
 
     public function store(Request $request)
     {
-    $validatedData = $request->validate([
-        'title' => 'required',
-        'author' => 'required',
-        ]);
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+            ]);
 
-    $book = new Book();
-    $book->title = $validatedData['title'];
-    $book->author = $validatedData['author'];
-    $book->save();
-    return redirect()->route('books');
+        /** Safe from sql injection */
+        $book = new Book();
+        $book->title = $validatedData['title'];
+        $book->author = $validatedData['author'];
+        $book->save();
+        return redirect()->route('books');
     }
 
 
@@ -76,7 +78,7 @@ class BooksController extends Controller
         $request->validate([
             'author' => 'required',
         ]);
-    
+        /** uses parameterization to protect from SQL injections */
         $book = Book::findOrFail($id);
         $book->author = $request->author;
         $book->save();
