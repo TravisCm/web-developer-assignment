@@ -34,7 +34,7 @@ class BooksController extends Controller
         $books = $query->get();
         $searchCount = $books->count();
 
-        return view('book', compact('books', 'searchCount', 'search'));
+        return view('book', compact('books', 'searchCount', 'search', 'sortOption'));
     }
     
     
