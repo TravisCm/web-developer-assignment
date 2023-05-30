@@ -37,4 +37,9 @@ COPY --from=composer $LARAVEL_PATH $LARAVEL_PATH
 
 RUN chown -R www-data $LARAVEL_PATH/storage
 
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+
+
 WORKDIR $LARAVEL_PATH

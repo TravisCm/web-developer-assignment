@@ -3,12 +3,20 @@
 <head>
     <title>Books</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- link css styles -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <!-- link js functions -->
+    <script src="js/app.js"></script>
+
+
 </head>
 <body>
     <div class="page-blur" id="page-blur">
         <div id="inputBox">
             <!-- Book search -->
             <form method="GET" action="{{ route('books') }}" name="searchForm" id="searchForm">
+                @csrf
                 <div class="input-container">
                     <input type="text" name="search" id="search" value="{{ $search }}" required placeholder="Search Book or Author">
                     <button type="submit" class="button primary">Search</button>
@@ -27,16 +35,18 @@
                     <button type="submit" class="button primary">Add Book</button>
                 </div>
             </form>
-
+            <div id="search-number">
+                <!-- Number of books shown from a search --> 
+                @if(isset($search))
+                    @if($searchCount > 0)
+                        <p>{{ $searchCount }} book(s) found.</p>
+                    @else
+                        <p>Sorry, no results found.</p>
+                    @endif
+                @endif
+            </div>
         </div>
-        <!-- Number of books shown from a search --> 
-        @if(isset($search))
-            @if($searchCount > 0)
-                <p>{{ $searchCount }} book(s) found.</p>
-            @else
-                <p>Sorry, no results found.</p>
-            @endif
-        @endif
+
         
         <!-- Book table display -->
         @if(isset($books))
@@ -104,6 +114,7 @@
         <form method="POST" action="{{ route('books.update', ['id' => ':id']) }}" id="updateForm">
             @csrf
             @method('PUT')
+            <h3>Update Authors Name:</h3>
             <!-- This hidden field stores the ID to be sent server side for the correct book to be updated -->
             <input type="hidden" id="updateId" name="id">
             <div>
@@ -111,162 +122,11 @@
                 <input type="text" id="updateAuthor" name="author" required>
             </div>
             <div id="update_submit_cancel_button">
-                <button type="submit" class="button primary" onclick="sumbitUpdate()">Update</button>
-                <button type="button" class="button red" onclick="closeUpdateModal()">Cancel</button>
+                <button type="submit" class="button primary" onclick="sumbitUpdate()">Save Changes</button>
+                <button type="button" class="button primary" onclick="closeUpdateModal()">Cancel</button>
             </div>
         </form>
     </div>
-<script>
-function openUpdateModal(id, author) {
-    document.getElementById('updateModal').style.display = 'block';
-    document.getElementById('updateId').value = id;
-    document.getElementById('updateAuthor').value = author;
-    document.getElementById('page-blur').style.filter = 'blur(5px)';
-    document.getElementById('page-blur').style.backgroundColor = '#ffff';
-    document.getElementById('page-blur').style.pointerEvents = 'none';
-}
-
-
-    function closeUpdateModal() {
-        document.getElementById('updateModal').style.display = 'none';
-        document.getElementById('page-blur').style.filter = 'none';
-        document.getElementById('page-blur').style.backgroundColor = 'transparent';
-        document.getElementById('page-blur').style.pointerEvents = 'auto';
-
-    }
-    function sumbitUpdate() {
-    /** Get the updated ID and author values */
-    var id = document.getElementById('updateId').value;
-    var author = document.getElementById('updateAuthor').value;
-
-    /** Update the form action URL with the correct book ID */
-    var form = document.getElementById('updateForm');
-    form.action = form.action.replace(':id', id);
-
-    /** Set the updated author value in the hidden input field */
-    document.getElementById('updateAuthor').value = author;
-    }
-
-    function sortBooks() {
-        const sortOption = document.querySelector('input[name="sortOption"]:checked').value;
-        const url = "{{ route('books') }}";
-        const queryString = `?sort=${sortOption}`;
-        window.location.href = url + queryString;
-    }
-
-    function clearSearch() {
-        document.getElementById('search').value = '';
-        document.querySelector('form[name="searchForm"]').submit();
-    }
-
-</script>
-<style>
-    html, body {
-    background-color: #fff;
-    color: #333333 ;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 200;
-    height: 100vh;
-    margin: 0;
-    }
-    .required-field {
-    color: red;
-    }
-    #inputBox {
-        background-color:#2c3e50;
-        color:#ffff;
-        padding: 40px;
-    }
-    #sort-by-container {
-        padding: 10px;
-    }
-    #export-container {
-        padding: 10px;
-    }
-    #update_submit_cancel_button{
-        margin: 10px;
-    }
-    /* Styles for the search bar */
-    .input-container {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    .form-popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        display: none;
-        height: 100px;
-        width: 40%;
-        text-align: center;
-        padding: 30px;
-        background-color: #D3D3D3;
-        border: 3px solid #2c3e50;
-        border-radius: 10px;
-        transform: translate(-50%, -50%);
-    }
-    .input-container input[type="text"] {
-        width: 300px;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        outline: none;
-    }
-    .form-popup input[type="text"] {
-        width: 300px;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        outline: none;
-    }
-    /* Common styles for buttons */
-    .button {
-        border-radius: 10px;
-        padding: 8px 16px;
-        font-size: 14px;
-        background-color: #f2f2f2;
-        border: none;
-        outline: none;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-    }
-    .button:hover {
-        background-color: #e0e0e0;
-    }
-    /* Specific styles for different button types */
-    .button.primary {
-        background-color: #4caf50;
-        color: #fff;
-    }
-    .button.blue {
-        background-color: #007bff;
-        color: #fff;
-    }
-    .button.red {
-        background-color: #EE4B2B;
-        color: #fff;
-    }
-    .my-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .my-table th, .my-table td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-    .my-table th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-    .my-table tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    .my-table tbody tr:hover {
-        background-color: #e6e6e6;
-    }
-</style>
-
 
 </body>
 </html>
