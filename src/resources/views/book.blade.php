@@ -23,6 +23,7 @@
                     <button type="reset" class="button primary" onclick="clearSearch()">Clear</button>
                 </div>
             </form>
+
             <!-- Add book -->
             <form method="POST" action="{{route('books.store')}}">
                 <!-- @csrf security -->
@@ -35,8 +36,9 @@
                     <button type="submit" class="button primary">Add Book</button>
                 </div>
             </form>
+
+            <!-- Number of books shown from a search --> 
             <div id="search-number">
-                <!-- Number of books shown from a search --> 
                 @if(isset($search))
                     @if($searchCount > 0)
                         <p>{{ $searchCount }} book(s) found.</p>
@@ -108,6 +110,7 @@
             </form>
         </div>
     </div>
+    
     <!-- Update book input field that pops up after selecting a book to update, allowing user to change author -->
     <div class="form-popup" id="updateModal">
         <!-- ':id' is used as a placeholder value, that will be replaced by an actual book ID if it exists-->
@@ -128,5 +131,45 @@
         </form>
     </div>
 
+<!-- This is here as a backup as stated in the README file -->
+<script>
+    function openUpdateModal(id, author) {
+    document.getElementById('updateModal').style.display = 'block';
+    document.getElementById('updateId').value = id;
+    document.getElementById('updateAuthor').value = author;
+    document.getElementById('page-blur').style.filter = 'blur(5px)';
+    document.getElementById('page-blur').style.backgroundColor = '#ffff';
+    document.getElementById('page-blur').style.pointerEvents = 'none';
+}
+
+function closeUpdateModal() {
+    document.getElementById('updateModal').style.display = 'none';
+    document.getElementById('page-blur').style.filter = 'none';
+    document.getElementById('page-blur').style.backgroundColor = 'transparent';
+    document.getElementById('page-blur').style.pointerEvents = 'auto';
+}
+
+function sumbitUpdate() {
+    var id = document.getElementById('updateId').value;
+    var author = document.getElementById('updateAuthor').value;
+    /* Update the form action URL with the correct book ID */
+    var form = document.getElementById('updateForm');
+    form.action = form.action.replace(':id', id);
+    /* Set the updated author value in the hidden input field */
+    document.getElementById('updateAuthor').value = author;
+}
+
+function sortBooks() {
+    const sortOption = document.querySelector('input[name="sortOption"]:checked').value;
+    const url = "{{ route('books') }}";
+    const queryString = `?sort=${sortOption}`;
+    window.location.href = url + queryString;
+}
+
+function clearSearch() {
+    document.getElementById('search').value = '';
+    document.querySelector('form[name="searchForm"]').submit();
+}
+</script>
 </body>
 </html>
