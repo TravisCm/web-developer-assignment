@@ -1,14 +1,20 @@
 Please read the ENTIRE read me file before proceeding.
 
 How To Run:
+1. Start the containers by running "docker-compose up -d" in the project root.
+2. Install the composer packages by running "docker-compose exec laravel composer install".
+3. Run command "docker exec -it assignment01-laravel bash" to run the docker container 
+4. Also ensure the mysql:8 container is also running (I use Docker extention for VS code to ensure this)
+5. Access the Laravel instance on http://localhost/books
+
+Testing:
 1. To run unit/feature tests run command "vendor/bin/phpunit". 
 Note: When running the unit/feature tests it will clear the database that appears on the 
 http://localhost/books page. I recommend running these tests prior to adding entries to 
 the table on http://localhost/books or you should run these tests at the very end.
 
 Security: 
-Some security features have been added to protect against malicious users. These features include Cross-site request forgery tokens
-(csvf) and the use of parameterization to protect from SQL injections. 
+Some security features have been added to protect against malicious users. These features include Cross-site request forgery tokens (csvf) and the use of parameterization to protect from SQL injections. 
 
 Assumptions:
 1. For the purposes of this assignment I am assuming that the requirements for functions laid out in the homework.txt is 
